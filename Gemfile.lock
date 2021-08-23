@@ -177,6 +177,9 @@ GEM
       unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.10.0)
       parser (>= 3.0.1.1)
+    rubocop-rspec (2.4.0)
+      rubocop (~> 1.0)
+      rubocop-ast (>= 1.1.0)
     ruby-progressbar (1.11.0)
     solargraph (0.43.0)
       backport (~> 1.2)
@@ -227,6 +230,7 @@ DEPENDENCIES
   rails (= 6.1.4)
   rspec-rails (~> 5.0.0)
   rubocop
+  rubocop-rspec
   solargraph
   spring
   tzinfo-data
