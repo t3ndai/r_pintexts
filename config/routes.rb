@@ -3,5 +3,5 @@ Rails.application.routes.draw do
   get 'health/index'
   resources :users, only: [:create, :update]
   resources :tokens, only: [:create]
-  resources :snippets, only: [:index, :show]
+  resources :snippets, only: [:index, :show, :create, :destroy]
 end
