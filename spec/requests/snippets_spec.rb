@@ -24,6 +24,8 @@ RSpec.describe "Snippets", type: :request do
 
        json_response = JSON.parse(response.body).deep_symbolize_keys
        expect(json_response[:data][:attributes][:description]).to eq(snippet.description)
+       expect(json_response[:data][:relationships][:user][:data][:id]).to eq(snippet.user_id.to_s)
+       expect(json_response[:included][0][:attributes][:username]).to eq(snippet.user.username)
     end 
   end 
 

@@ -9,7 +9,8 @@ class SnippetsController < ApplicationController
     end 
 
     def show 
-        render json: SnippetSerializer.new(@snippet).serializable_hash
+        options = { include: [:user] }
+        render json: SnippetSerializer.new(@snippet, options).serializable_hash
     end
 
     def create 
