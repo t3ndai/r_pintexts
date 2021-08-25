@@ -1,6 +1,12 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:update]
+  before_action :set_user, only: [:show, :update]
   before_action :check_owner, only: [:update]
+
+  def show 
+    options = { include: [:snippets] }
+    render json: UserSerializer.new(@user, options).serializable_hash
+  end 
+
   def create
     @user = User.new(user_params)
 

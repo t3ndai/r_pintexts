@@ -59,4 +59,26 @@ RSpec.describe 'Users', type: :request do
       end
     end
   end
+
+  describe "GET /show" do 
+    let(:user) {
+      User.create(username: 'aa', password: ('a' * 8).to_s, password_confirmation: ('a' * 8).to_s,
+                            email: 'aa@aa.com')
+    }
+
+    example "show user" do 
+
+      Snippet.create(description: Faker::Quote.yoda, url: Faker::Internet.url, user_id: user.id)
+
+      get "/users/#{user.id}"
+      
+      expect(response).to have_http_status(:success)
+      
+      json_response = JSON.parse(response.body, symbolize_names: true)
+
+      expect(json_response.dig(:data,:attributes, :username)).to eq(user.username)
+      expect(user.snippets.first.id.to_s).to eq(json_response.dig(:data, :relationships, :snippets, :data, 0, :id))
+      expect(json_response.dig(:included,0,:attributes,:description)).to eq(user.snippets.first.description)
+    end 
+  end 
 end
