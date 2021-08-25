@@ -4,18 +4,19 @@ class SnippetsController < ApplicationController
     before_action :check_owner, only: [:destroy]
 
     def index 
-        render json: Snippet.all
+        @snippets = Snippet.all 
+        render json: SnippetSerializer.new(@snippets).serializable_hash
     end 
 
     def show 
-        render json: @snippet
+        render json: SnippetSerializer.new(@snippet).serializable_hash
     end
 
     def create 
         snippet = Snippet.new(snippet_params)
         snippet.user = current_user
         if snippet.save 
-            render json: snippet, status: :created 
+            render json: SnippetSerializer.new(snippet).serializable_hash, status: :created 
         else 
             render json: {errors: snippet.errors}, status: :bad_request
         end 

@@ -23,7 +23,7 @@ RSpec.describe "Snippets", type: :request do
        expect(response).to have_http_status(:success)
 
        json_response = JSON.parse(response.body).deep_symbolize_keys
-       expect(json_response[:description]).to eq(snippet.description)
+       expect(json_response[:data][:attributes][:description]).to eq(snippet.description)
     end 
   end 
 
