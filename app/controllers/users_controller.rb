@@ -5,7 +5,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      render json: { id: @user.id, username: @user.username }, status: 201
+      render json: UserSerializer.new(@user).serializable_hash, status: 201
     else
       render json: @user.errors, status: 400
     end
@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     user_params.each do |key, value|
       @user.update_attribute(key, value)
     end
-    render json: { id: @user.id, username: @user.username }, status: 202
+    render json: UserSerializer.new(@user).serializable_hash, status: 202
   rescue StandardError => e
     render json: @user.errors, status: 400
   end

@@ -10,7 +10,7 @@ RSpec.describe 'Users', type: :request do
       expect(response.status).to eq(201)
 
       user_response = JSON.parse(response.body).deep_symbolize_keys
-      expect(user_response).to include(:id, :username)
+      expect(user_response[:data][:attributes]).to include(:username)
     end
 
     example 'invalid user attributes' do
@@ -38,7 +38,7 @@ RSpec.describe 'Users', type: :request do
 
         user_response = JSON.parse(response.body).deep_symbolize_keys
 
-        expect(user_response[:username]).to eq('ab')
+        expect(user_response[:data][:attributes][:username]).to eq('ab')
       end
 
       example 'should forbid update without autorization' do
