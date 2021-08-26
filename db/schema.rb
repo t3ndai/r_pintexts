@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_24_021716) do
+ActiveRecord::Schema.define(version: 2021_08_26_105856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "collections", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name", null: false
+    t.boolean "private"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name", "user_id"], name: "index_collections_on_name_and_user_id", unique: true
+    t.index ["user_id"], name: "index_collections_on_user_id"
+  end
 
   create_table "snippets", force: :cascade do |t|
     t.text "description", null: false
@@ -34,5 +44,6 @@ ActiveRecord::Schema.define(version: 2021_08_24_021716) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "collections", "users"
   add_foreign_key "snippets", "users"
 end

@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :snippets
+  has_many :collections, dependent: :destroy
   before_save { self.email = email.downcase }
 
   Valid_email_regex = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
