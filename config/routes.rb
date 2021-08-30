@@ -4,5 +4,5 @@ Rails.application.routes.draw do
   resources :users, only: [:show, :create, :update]
   resources :tokens, only: [:create]
   resources :snippets, only: [:index, :show, :create, :destroy]
-  resources :collections, only: [:index]
+  resources :collections, only: [:index, :show]
 end
