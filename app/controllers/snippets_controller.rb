@@ -9,8 +9,12 @@ class SnippetsController < ApplicationController
     end 
 
     def show 
-        options = { include: [:user] }
-        render json: SnippetSerializer.new(@snippet, options).serializable_hash
+        if @snippet
+            options = { include: [:user] }
+            render json: SnippetSerializer.new(@snippet, options).serializable_hash
+        else 
+            head :not_found 
+        end 
     end
 
     def create 

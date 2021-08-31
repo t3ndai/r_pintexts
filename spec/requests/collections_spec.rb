@@ -25,4 +25,30 @@ RSpec.describe "Collections", type: :request do
 
     end 
   end 
+
+  describe "POST /create" do 
+    example "should forbid create collection for unlogged user" do 
+      post "/collections/", params: { collection: {name: @collection.name }}
+      expect(response).to have_http_status(:forbidden)
+    end 
+
+    example "should create collection for logged in user" do 
+      other_collection = Collection.new(name: 'my saved stuff', user_id: @user.id)
+      post "/collections/", params: { collection: {name: other_collection.name } }, headers: { Authorization: JsonWebToken.encode(user_id: other_collection.user_id)}
+      expect(response).to have_http_status(:created)
+    end 
+  end 
+
+  describe "DELETE /destroy" do 
+    example "should delete a collection for a user" do 
+      delete "/collections/#{@collection.id}", headers: {Authorization: JsonWebToken.encode(user_id: @collection.user_id)}
+      expect(response).to have_http_status(:no_content)
+    end
+    
+    example "should forbid non collection owner to destroy collection" do 
+      user_2 = User.create(username: 'bb', email: 'bb@bb.com', password: ('b'*8).to_s, password_confirmation: ('b'*8).to_s)
+      delete "/collections/#{@collection.id}", headers: {Authorization: JsonWebToken.encode(user_id: user_2.id)}
+      expect(response).to have_http_status(:forbidden)
+    end 
+  end 
 end

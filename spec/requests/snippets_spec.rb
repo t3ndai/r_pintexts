@@ -42,12 +42,12 @@ RSpec.describe "Snippets", type: :request do
   end 
 
   describe "DELETE /destroy" do 
-    example "should delete a product for a user" do 
+    example "should delete a snippet for a user" do 
       delete "/snippets/#{snippet.id}", headers: {Authorization: JsonWebToken.encode(user_id: snippet.user_id)}
       expect(response).to have_http_status(:no_content)
     end
 
-    example "should forbid non snippet owner to destroy product" do 
+    example "should forbid non snippet owner to destroy snippet" do 
       user_2 = User.create(username: 'bb', email: 'bb@bb.com', password: ('b'*8).to_s, password_confirmation: ('b'*8).to_s)
       delete "/snippets/#{snippet.id}", headers: {Authorization: JsonWebToken.encode(user_id: user_2.id)}
       expect(response).to have_http_status(:forbidden)
