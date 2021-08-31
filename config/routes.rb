@@ -9,5 +9,6 @@ Rails.application.routes.draw do
     member do 
       post 'snippet'
     end
-  end 
+  end
+  delete '/collections/:id/:snippet_id', to: 'collections#snippet_remove'
 end

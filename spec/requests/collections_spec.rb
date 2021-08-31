@@ -69,4 +69,17 @@ RSpec.describe "Collections", type: :request do
       expect(response).to have_http_status(:forbidden)
     end 
   end 
+
+  describe "DELETE /:collection/:snippet" do 
+    example "should remove snippet from collection for logged in user" do 
+      delete "/collections/#{@collection.id}/#{@snippet.id}", headers: {Authorization: JsonWebToken.encode(user_id: @collection.user_id)}
+      expect(response).to have_http_status(:no_content)
+    end
+    
+    example "should forbid non owner from removing snippet in collection" do 
+      user_2 = User.create(username: 'bb', email: 'bb@bb.com', password: ('b'*8).to_s, password_confirmation: ('b'*8).to_s)
+      delete "/collections/#{@collection.id}/#{@snippet.id}", headers: {Authorization: JsonWebToken.encode(user_id: user_2.id)}
+      expect(response).to have_http_status(:forbidden)
+    end 
+  end 
 end

@@ -1,7 +1,7 @@
 class CollectionsController < ApplicationController
-    before_action :set_collection, only: [:destroy, :snippet]
+    before_action :set_collection, only: [:destroy, :snippet, :snippet_remove]
     before_action :check_login, only: [:create, :snippet]
-    before_action :check_owner, only: [:destroy]
+    before_action :check_owner, only: [:destroy, :snippet_remove]
     def index 
         @collections = Collection.all 
         render json: CollectionsSerializer.new(@collections).serializable_hash
@@ -38,7 +38,14 @@ class CollectionsController < ApplicationController
         @collection.snippets << @snippet 
         options = {include: [:snippets] }
         render json: CollectionsSerializer.new(@collection).serializable_hash, status: :created
-    end 
+    end
+
+    def snippet_remove
+        snippet_id = params[:snippet_id]
+        @snippet = Snippet.find(snippet_id)
+        @collection.snippets.destroy(@snippet)
+        head :no_content
+    end
 
     private 
     def collection_params 
