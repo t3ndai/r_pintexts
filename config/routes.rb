@@ -5,4 +5,9 @@ Rails.application.routes.draw do
   resources :tokens, only: [:create]
   resources :snippets, only: [:index, :show, :create, :destroy]
   resources :collections, only: [:index, :show, :create, :destroy]
+  resources :collections do 
+    member do 
+      post 'snippet'
+    end
+  end 
 end

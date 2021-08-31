@@ -1,6 +1,6 @@
 class CollectionsController < ApplicationController
-    before_action :set_collection, only: [:destroy]
-    before_action :check_login, only: [:create]
+    before_action :set_collection, only: [:destroy, :snippet]
+    before_action :check_login, only: [:create, :snippet]
     before_action :check_owner, only: [:destroy]
     def index 
         @collections = Collection.all 
@@ -30,12 +30,19 @@ class CollectionsController < ApplicationController
     def destroy
         @collection.destroy 
         head :no_content
-    end 
+    end
 
+    def snippet 
+        snippet_id = collection_params.dig(:snippet, :snippet_id)
+        @snippet = Snippet.find(snippet_id)
+        @collection.snippets << @snippet 
+        options = {include: [:snippets] }
+        render json: CollectionsSerializer.new(@collection).serializable_hash, status: :created
+    end 
 
     private 
     def collection_params 
-        params.require(:collection).permit(:name)
+        params.require(:collection).permit(:name, {snippet: :snippet_id } )
     end 
 
     def check_owner

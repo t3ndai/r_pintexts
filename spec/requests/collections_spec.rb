@@ -50,5 +50,23 @@ RSpec.describe "Collections", type: :request do
       delete "/collections/#{@collection.id}", headers: {Authorization: JsonWebToken.encode(user_id: user_2.id)}
       expect(response).to have_http_status(:forbidden)
     end 
+  end
+
+  describe "POST /snippet" do 
+    example "should save snippet to collection for user" do 
+      post "/collections/#{@collection.id}/snippet", params: {collection: {snippet: {snippet_id: @snippet.id } } }, headers: {Authorization: JsonWebToken.encode(user_id: @collection.user_id)}
+
+      expect(response).to have_http_status(:created)
+
+      json_response = JSON.parse(response.body, symbolize_names: true)
+
+      expect(@user.snippets.first.id.to_s).to eq(json_response.dig(:data, :relationships, :snippets, :data, 0, :id))
+    end
+    
+    example "should forbid non logged in user to save a snippet to collection" do 
+      post "/collections/#{@collection.id}/snippet", params: {collection: {snippet: {snippet_id: @snippet.id} } }
+
+      expect(response).to have_http_status(:forbidden)
+    end 
   end 
 end
